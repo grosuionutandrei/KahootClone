@@ -29,6 +29,7 @@ jobs:
           region: europe-north1
           source: .
           flags: --allow-unauthenticated
+          run: echo "DBCONNECTIONSTRING is set"
           env_vars: |
             AppOptions__DbConnectionString=${{ secrets.DBCONNECTIONSTRING }}
 
