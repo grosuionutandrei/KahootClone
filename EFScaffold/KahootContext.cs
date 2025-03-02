@@ -43,6 +43,7 @@ public partial class KahootContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.GameId).HasColumnName("game_id");
             entity.Property(e => e.Nickname).HasColumnName("nickname");
+            entity.Property(e => e.AvatarId).HasColumnName("avatar_id");
 
             entity.HasOne(d => d.Game).WithMany(p => p.Players)
                 .HasForeignKey(d => d.GameId)

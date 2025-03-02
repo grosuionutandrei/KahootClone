@@ -4,6 +4,7 @@ using Api.Documentation;
 using Api.Utilities;
 using Api.WebSockets;
 using EFScaffold;
+using EFScaffold.Repos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
@@ -21,16 +22,19 @@ public class Program
             .Bind(builder.Configuration.GetSection(nameof(AppOptions)));
 
         var appOptions = builder.Services.AddAppOptions();
-
+           
         builder.Services.AddDbContext<KahootContext>(options =>
         {
             options.UseNpgsql(appOptions.DbConnectionString);
             options.EnableSensitiveDataLogging();
         });
+       
         builder.Services.AddScoped<Seeder>();
-
-
+        var mediatRAssembly = Assembly.Load("EFScaffold"); // Replace with your project name
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(mediatRAssembly));
+        // builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
         builder.Services.AddSingleton<IGameTimeProvider, GameTimeProvider>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddSingleton<IConnectionManager, DictionaryConnectionManager>();
         builder.Services.AddSingleton<CustomWebSocketServer>();
         builder.Services.InjectEventHandlers(Assembly.GetExecutingAssembly());
@@ -43,6 +47,13 @@ public class Program
         });
         
         var app = builder.Build();
+        // using (var scope = app.Services.CreateScope())
+        // {
+        //     var services = scope.ServiceProvider;
+        //     var dbContext = services.GetRequiredService<KahootContext>();
+        //     var seeder = new Seeder(dbContext);
+        //      seeder.SeedDefaultGameReturnId();
+        // }
         app.UseOpenApi();
         app.GenerateTypeScriptClient("/../client/src/generated-client.ts").GetAwaiter().GetResult();
         app.Services.GetRequiredService<CustomWebSocketServer>().Start(app);

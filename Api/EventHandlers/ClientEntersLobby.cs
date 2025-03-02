@@ -22,8 +22,8 @@ public class ClientEntersLobbyEventHandler(IConnectionManager connectionManager)
             socket.ConnectionInfo.Id.ToString());
         await connectionManager.AddToTopic("lobby", clientId);
         var allClients = await connectionManager.GetMembersFromTopicId("lobby");
-        await connectionManager.BroadcastToTopic("lobby",
-            new ServerPutsClientInLobbyAndBroadcastsToEveryoneDto { AllClientIds = allClients });
+        Console.WriteLine(allClients.Count);
+        await connectionManager.BroadcastToTopic("lobby", new ServerPutsClientInLobbyAndBroadcastsToEveryoneDto { AllClientIds = allClients });
         var confirmationToClient = new ServerConfirmsDto()
         {
             requestId = dto.requestId,

@@ -10,10 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.0.9",
+    "browser-router": "^0.2.0",
+    "fs": "^0.0.1-security",
+    "jotai": "^2.12.1",
+    "node-fs": "^0.1.7",
+    "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "ws-request-hook": "^1.0.13",
-    "react-hot-toast": "^2.5.2"
+    "react-hot-toast": "^2.5.2",
+    "react-router-dom": "^7.2.0",
+    "tailwindcss": "^4.0.9",
+    "ws-request-hook": "^1.0.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

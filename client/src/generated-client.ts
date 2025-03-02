@@ -35,6 +35,17 @@ export interface ServerSendsErrorMessageDto extends BaseDto {
     error?: string;
 }
 
+export interface ClientAddsPlayerInfoDto extends BaseDto {
+    id?: string;
+    gameId?: string | undefined;
+    nickname?: string;
+    avatarId?: string;
+}
+
+export interface ServerPutsPlayerInGameAndBroadcastToAll extends BaseDto {
+    avatarId?: string;
+}
+
 /** Available eventType constants */
 export enum StringConstants {
     MemberHasLeftDto = "MemberHasLeftDto",
@@ -42,5 +53,7 @@ export enum StringConstants {
     ServerPutsClientInLobbyAndBroadcastsToEveryoneDto = "ServerPutsClientInLobbyAndBroadcastsToEveryoneDto",
     ServerConfirmsDto = "ServerConfirmsDto",
     ServerSendsErrorMessageDto = "ServerSendsErrorMessageDto",
+    ClientAddsPlayerInfoDto = "ClientAddsPlayerInfoDto",
+    ServerPutsPlayerInGameAndBroadcastToAll = "ServerPutsPlayerInGameAndBroadcastToAll",
 }
 

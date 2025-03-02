@@ -8,6 +8,7 @@
 appsettings.json
 appsettings.Development.json
 appsettings.Production.json
+
 key.json
 
 # User-specific files
