@@ -11,8 +11,8 @@ export default function Lobby() {
         //communicate with server here
     }, [readyState]); 
 
-    return (<>
+    return (
+        <>
         <>hello world</>
-
-    </>)
+        </>)
 }

@@ -11,6 +11,10 @@ import { BaseDto } from 'ws-request-hook';
 
 
 
+export interface BaseDto {
+    eventType?: string;
+    requestId?: string;
+}
 
 export interface MemberHasLeftDto extends BaseDto {
     memberId?: string;
