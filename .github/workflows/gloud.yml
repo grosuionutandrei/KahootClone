@@ -20,6 +20,10 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - name: Debug Secrets
+        run: echo "DBCONNECTIONSTRING is set"
+        env:
+          AppOptions__DbConnectionString: ${{ secrets.DBCONNECTIONSTRING }}
 
       - name: Deploy to Cloud Run
         id: deploy
@@ -29,7 +33,6 @@ jobs:
           region: europe-north1
           source: .
           flags: --allow-unauthenticated
-          run: echo "DBCONNECTIONSTRING is set"
           env_vars: |
             AppOptions__DbConnectionString=${{ secrets.DBCONNECTIONSTRING }}
 
