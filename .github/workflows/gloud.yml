@@ -33,7 +33,7 @@ jobs:
           region: europe-north1
           source: .
           flags: --allow-unauthenticated
-          env_vars: |
-            AppOptions__DbConnectionString=${{ secrets.DBCONNECTIONSTRING }}
+          # env_vars: |
+          #   AppOptions__DbConnectionString=${{ secrets.DBCONNECTIONSTRING }}
 
       - run: echo "${{ steps.deploy.outputs.url }}"
