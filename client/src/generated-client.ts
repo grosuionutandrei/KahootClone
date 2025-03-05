@@ -44,6 +44,7 @@ export interface ClientAddsPlayerInfoDto extends BaseDto {
 
 export interface ServerPutsPlayerInGameAndBroadcastToAll extends BaseDto {
     avatarId?: string;
+    allClientIds?: string[];
 }
 
 /** Available eventType constants */
