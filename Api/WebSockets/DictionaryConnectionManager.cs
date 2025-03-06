@@ -173,7 +173,7 @@ public class DictionaryConnectionManager(ILogger<DictionaryConnectionManager> lo
             return;
         }
 
-
+        logger.LogInformation($"Socket available for {memberId}");
         socket.SendDto(message);
     }
 

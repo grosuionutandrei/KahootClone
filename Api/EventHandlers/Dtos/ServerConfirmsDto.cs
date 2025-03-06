@@ -6,3 +6,4 @@ public class ServerConfirmsDto : BaseDto
 {
     public bool Success { get; set; }
 }
+

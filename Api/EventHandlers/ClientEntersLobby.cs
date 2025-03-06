@@ -11,6 +11,11 @@ public class ServerPutsClientInLobbyAndBroadcastsToEveryoneDto : BaseDto
 {
     public List<string> AllClientIds { get; set; }
 }
+//TODO investigate why the player has no socket 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="connectionManager"></param>
 
 public class ClientEntersLobbyEventHandler(IConnectionManager connectionManager)
     : BaseEventHandler<ClientEntersLobbyDto>
@@ -22,7 +27,7 @@ public class ClientEntersLobbyEventHandler(IConnectionManager connectionManager)
             socket.ConnectionInfo.Id.ToString());
         await connectionManager.AddToTopic("lobby", clientId);
         var allClients = await connectionManager.GetMembersFromTopicId("lobby");
-        Console.WriteLine(allClients.Count);
+        Console.WriteLine(allClients);
         await connectionManager.BroadcastToTopic("lobby", new ServerPutsClientInLobbyAndBroadcastsToEveryoneDto { AllClientIds = allClients });
         var confirmationToClient = new ServerConfirmsDto()
         {

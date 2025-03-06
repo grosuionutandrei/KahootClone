@@ -16,9 +16,9 @@ public class ClientAddsPlayerInfoDto : BaseDto
     public string AvatarId { get; set; } = null!;
 }
 
-public class ServerPutsPlayerInGameAndBroadcastToAll : BaseDto
+public class ServerUpdatePlayersDto : BaseDto
     {
-        public string AvatarId { get; set; } = null!;
+        public int players { get; set; }
     }
 
     public class ClientAddsPlayerInfoEventHandler
@@ -43,12 +43,12 @@ public class ServerPutsPlayerInGameAndBroadcastToAll : BaseDto
                GameId = dto.GameId,
                Nickname = dto.Nickname
             };
-          
            var res = await _mediator.Send( new EFScaffold.commands.AddPlayer(playerInfo));
            if (res)
            {
                await _connectionManager.AddToTopic("lobby",dto.Id);
-               await _connectionManager.BroadcastToTopic("lobby", new ServerPutsPlayerInGameAndBroadcastToAll { AvatarId=dto.AvatarId });
+               var players = await _connectionManager.GetMembersFromTopicId("lobby");
+               await _connectionManager.BroadcastToTopic("lobby", new ServerUpdatePlayersDto()  {players  = players.Count});
            }
            var confirmationToClient = new ServerConfirmsDto()
             {
