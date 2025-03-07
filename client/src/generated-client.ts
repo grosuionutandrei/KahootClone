@@ -27,12 +27,34 @@ export interface ServerPutsClientInLobbyAndBroadcastsToEveryoneDto extends BaseD
     allClientIds?: string[];
 }
 
+export interface ClientRetrieveAvatarDto extends BaseDto {
+    gameId?: string;
+}
+
+export interface ServerSendsAvatarList extends BaseDto {
+    paths?: string[];
+}
+
 export interface ServerConfirmsDto extends BaseDto {
     success?: boolean;
 }
 
 export interface ServerSendsErrorMessageDto extends BaseDto {
     error?: string;
+}
+
+export interface ClientLoadsPlayersNumberDto extends BaseDto {
+    topic?: string;
+}
+
+export interface AdminCreatesGameDto extends BaseDto {
+    name?: string;
+}
+
+export interface ServerConfirmsGameDto extends BaseDto {
+    id?: string;
+    name?: string;
+    success?: boolean;
 }
 
 export interface ClientAddsPlayerInfoDto extends BaseDto {
@@ -42,9 +64,9 @@ export interface ClientAddsPlayerInfoDto extends BaseDto {
     avatarId?: string;
 }
 
-export interface ServerPutsPlayerInGameAndBroadcastToAll extends BaseDto {
-    avatarId?: string;
-    allClientIds?: string[];
+export interface ServerUpdatePlayersDto extends BaseDto {
+    players?: number;
+    avatars?: string[];
 }
 
 /** Available eventType constants */
@@ -52,9 +74,14 @@ export enum StringConstants {
     MemberHasLeftDto = "MemberHasLeftDto",
     ClientEntersLobbyDto = "ClientEntersLobbyDto",
     ServerPutsClientInLobbyAndBroadcastsToEveryoneDto = "ServerPutsClientInLobbyAndBroadcastsToEveryoneDto",
+    ClientRetrieveAvatarDto = "ClientRetrieveAvatarDto",
+    ServerSendsAvatarList = "ServerSendsAvatarList",
     ServerConfirmsDto = "ServerConfirmsDto",
     ServerSendsErrorMessageDto = "ServerSendsErrorMessageDto",
+    ClientLoadsPlayersNumberDto = "ClientLoadsPlayersNumberDto",
+    AdminCreatesGameDto = "AdminCreatesGameDto",
+    ServerConfirmsGameDto = "ServerConfirmsGameDto",
     ClientAddsPlayerInfoDto = "ClientAddsPlayerInfoDto",
-    ServerPutsPlayerInGameAndBroadcastToAll = "ServerPutsPlayerInGameAndBroadcastToAll",
+    ServerUpdatePlayersDto = "ServerUpdatePlayersDto",
 }
 

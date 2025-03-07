@@ -1,6 +1,6 @@
-﻿namespace EFScaffold.commands;
+﻿using EFScaffold.Dto;
+using MediatR;
 
-public class CreateGameDto
-{
-    
-}
+namespace EFScaffold.commands;
+
+public record CreateGameDto(CreateNewGameDto NewGame):IRequest<GameCreatedDto>;

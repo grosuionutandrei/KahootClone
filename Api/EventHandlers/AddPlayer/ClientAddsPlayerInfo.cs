@@ -1,6 +1,7 @@
 ﻿using Api.EventHandlers.Dtos;
 using Api.WebSockets;
 using EFScaffold.Dto;
+using EFScaffold.querry;
 using Fleck;
 using MediatR;
 using WebSocketBoilerplate;
@@ -19,7 +20,13 @@ public class ClientAddsPlayerInfoDto : BaseDto
 public class ServerUpdatePlayersDto : BaseDto
     {
         public int players { get; set; }
+        public List<string> avatars { get; set; }
     }
+
+public class ServerUpdateJoinPlayersDto : BaseDto
+{
+    public List<Pl> avatars { get; set; }
+}
 
     public class ClientAddsPlayerInfoEventHandler
         : BaseEventHandler<ClientAddsPlayerInfoDto>
@@ -47,8 +54,9 @@ public class ServerUpdatePlayersDto : BaseDto
            if (res)
            {
                await _connectionManager.AddToTopic("lobby",dto.Id);
+               var avatars = await _mediator.Send(new Avatars(dto.GameId!));
                var players = await _connectionManager.GetMembersFromTopicId("lobby");
-               await _connectionManager.BroadcastToTopic("lobby", new ServerUpdatePlayersDto()  {players  = players.Count});
+               await _connectionManager.BroadcastToTopic("lobby", new ServerUpdatePlayersDto()  {players  = players.Count,avatars=avatars.avatars!});
            }
            var confirmationToClient = new ServerConfirmsDto()
             {

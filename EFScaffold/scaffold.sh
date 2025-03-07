@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 #the below will read the the CONN_STR from .env file - you may change this to your connection string
 set -a
 source .env

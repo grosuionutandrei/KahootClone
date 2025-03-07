@@ -4,4 +4,4 @@ using MediatR;
 
 namespace EFScaffold.commands;
 
-public record AddPlayer(PlayerInfoDto player) : IRequest<bool>;
+public record AddPlayer(PlayerInfoDto Player) : IRequest<bool>;

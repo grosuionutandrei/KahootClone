@@ -23,10 +23,13 @@ const reactToChange=(val:string)=>{
 }
 
 const enterToLobby =async ()=>{
+    if(lobby.trim()===""){
+        toast.error("Please enter a game id");
+        return;
+    }
     var request:ClientEntersLobbyDto = {
         eventType:StringConstants.ClientEntersLobbyDto,
         requestId: crypto.randomUUID().toString()}
-    console.log(request);
     try{
         const signInResult: ServerConfirmsDto = await sendRequest<ClientEntersLobbyDto
             , ServerConfirmsDto>(request,StringConstants.ServerConfirmsDto).finally(()=>console.log("er"));

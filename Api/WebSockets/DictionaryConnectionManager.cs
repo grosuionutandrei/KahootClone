@@ -121,7 +121,7 @@ public class DictionaryConnectionManager(ILogger<DictionaryConnectionManager> lo
         logger.LogInformation($"Added new connection {socket.ConnectionInfo.Id} for client {clientId}");
         await LogCurrentState();
     }
-
+    
     public async Task OnClose(IWebSocketConnection socket, string clientId)
     {
         var socketId = socket.ConnectionInfo.Id.ToString();
@@ -130,20 +130,38 @@ public class DictionaryConnectionManager(ILogger<DictionaryConnectionManager> lo
             currentSocket.ConnectionInfo.Id.ToString() == socketId)
         {
             ConnectionIdToSocket.TryRemove(clientId, out _);
-            logger.LogInformation($"Removed connection for client {clientId}");
+            logger.LogInformation($"Removed WebSocket connection for client {clientId}");
         }
 
         SocketToConnectionId.TryRemove(socketId, out _);
 
-        if (MemberTopics.TryGetValue(clientId, out var topics))
-            foreach (var topic in topics)
-            {
-                await RemoveFromTopic(topic, clientId);
-                await BroadcastToTopic(topic, new MemberHasLeftDto { MemberId = clientId });
-            }
-
-        MemberTopics.TryRemove(clientId, out _);
+        // 🔹 DO NOT REMOVE CLIENT FROM TOPICS on refresh
+        logger.LogInformation($"Client {clientId} disconnected, but remains in their topics.");
     }
+
+
+    // public async Task OnClose(IWebSocketConnection socket, string clientId)
+    // {
+    //     var socketId = socket.ConnectionInfo.Id.ToString();
+    //
+    //     if (ConnectionIdToSocket.TryGetValue(clientId, out var currentSocket) &&
+    //         currentSocket.ConnectionInfo.Id.ToString() == socketId)
+    //     {
+    //         ConnectionIdToSocket.TryRemove(clientId, out _);
+    //         logger.LogInformation($"Removed connection for client {clientId}");
+    //     }
+    //
+    //     SocketToConnectionId.TryRemove(socketId, out _);
+    //
+    //     if (MemberTopics.TryGetValue(clientId, out var topics))
+    //         foreach (var topic in topics)
+    //         {
+    //             await RemoveFromTopic(topic, clientId);
+    //             await BroadcastToTopic(topic, new MemberHasLeftDto { MemberId = clientId });
+    //         }
+    //
+    //     MemberTopics.TryRemove(clientId, out _);
+    // }
 
     public async Task BroadcastToTopic<T>(string topic, T message) where T : BaseDto
     {

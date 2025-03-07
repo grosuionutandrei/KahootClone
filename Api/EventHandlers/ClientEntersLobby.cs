@@ -11,11 +11,7 @@ public class ServerPutsClientInLobbyAndBroadcastsToEveryoneDto : BaseDto
 {
     public List<string> AllClientIds { get; set; }
 }
-//TODO investigate why the player has no socket 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="connectionManager"></param>
+
 
 public class ClientEntersLobbyEventHandler(IConnectionManager connectionManager)
     : BaseEventHandler<ClientEntersLobbyDto>

@@ -11,6 +11,7 @@ public partial class KahootContext : DbContext
     }
 
     public virtual DbSet<Game> Games { get; set; }
+    public virtual DbSet<Avatar> Avatars { get; set; }
 
     public virtual DbSet<Player> Players { get; set; }
 
@@ -30,6 +31,13 @@ public partial class KahootContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Name).HasColumnName("name");
+        });
+        
+        modelBuilder.Entity<Avatar>(entity =>
+        {
+            entity.HasKey(e => e.Path).HasName("avatars_pk");
+            entity.ToTable("avatars", "kahoot");
+            entity.Property(e => e.Path).HasColumnName("path");
         });
 
         modelBuilder.Entity<Player>(entity =>

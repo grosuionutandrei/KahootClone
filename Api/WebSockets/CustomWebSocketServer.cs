@@ -37,6 +37,7 @@ public class CustomWebSocketServer(IConnectionManager manager, ILogger<CustomWeb
                     catch (Exception e)
                     {
                         logger.LogError(e, "Error while handling message");
+                        Console.WriteLine($"Message: {message}");
                         socket.SendDto(new ServerSendsErrorMessageDto
                         {
                             Error = e.Message

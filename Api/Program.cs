@@ -5,6 +5,7 @@ using Api.Utilities;
 using Api.WebSockets;
 using EFScaffold;
 using EFScaffold.Repos;
+using EFScaffold.Repos.avatar;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
@@ -34,6 +35,7 @@ public class Program
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(mediatRAssembly));
         builder.Services.AddSingleton<IGameTimeProvider, GameTimeProvider>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IAvatarRepo, AvatarRepo>();
         builder.Services.AddSingleton<IConnectionManager, DictionaryConnectionManager>();
         builder.Services.AddSingleton<CustomWebSocketServer>();
         builder.Services.InjectEventHandlers(Assembly.GetExecutingAssembly());
