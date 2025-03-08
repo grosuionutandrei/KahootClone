@@ -25,7 +25,7 @@ public class ServerUpdatePlayersDto : BaseDto
 
 public class ServerUpdateJoinPlayersDto : BaseDto
 {
-    public List<Pl> avatars { get; set; }
+    public List<PlayerInfoDto> players { get; set; }
 }
 
     public class ClientAddsPlayerInfoEventHandler
@@ -57,6 +57,8 @@ public class ServerUpdateJoinPlayersDto : BaseDto
                var avatars = await _mediator.Send(new Avatars(dto.GameId!));
                var players = await _connectionManager.GetMembersFromTopicId("lobby");
                await _connectionManager.BroadcastToTopic("lobby", new ServerUpdatePlayersDto()  {players  = players.Count,avatars=avatars.avatars!});
+               var playersInfo = await _mediator.Send(new RetrievePlayers(dto.GameId!));
+               await _connectionManager.BroadcastToTopic("lobby", new ServerUpdateJoinPlayersDto() { players = playersInfo,requestId = dto.requestId});
            }
            var confirmationToClient = new ServerConfirmsDto()
             {
