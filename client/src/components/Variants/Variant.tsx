@@ -1,9 +1,22 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {AnswerParams} from "../../paramModels/models.ts";
+import {QuestionOptionDto} from "../../generated-client.ts";
+import toast from "react-hot-toast";
 
 export const Variant = (answerParams:AnswerParams) => {
     const colors = ["bg-red-500","bg-yellow-500","bg-blue-500","bg-green-500"];
     const [disabled,setDisabled] = useState<boolean>(answerParams.disabled);
+    const [selectedButtonId, setSelectedButtonId] = useState<string | null>(null);
+    const [button, setButtons] = useState<{ shape: string, id: string, svg: JSX.Element }[]>([]);
+    useEffect(() => {
+        setDisabled(answerParams.disabled);
+    }, [answerParams.disabled]);
+
+    useEffect(() => {
+        toast.success("options updated")
+        toast.success(answerParams.options.length+"");
+        setButtons(mapButtonsToQuestionId(answerParams.options));
+    }, [answerParams.options]);
 
 
 
@@ -63,30 +76,36 @@ export const Variant = (answerParams:AnswerParams) => {
             )}
     ];
 
-    const shuffledButtons = useMemo(() => {
-        return [...buttons].sort(() => Math.random() - 0.5);
-    }, []);
+    const mapButtonsToQuestionId = (questionOptions:QuestionOptionDto[]) => {
+        return buttons.map((btn,index) => {
+            const matchingOption = questionOptions.find((option) => option.optionShape === btn.shape);
+            return {
+                ...btn,
+                id: matchingOption ? matchingOption.optionId || "" : ""
+            };
+        });
+    };
 
-    const  mapButtonsToQuestionId=()=>{
 
-    }
-
-const onAnswer=(value:string)=>{
-  answerParams.retrieveValue(value);
-}
+    const onAnswer = (value: string) => {
+        toast.success(value);
+        setSelectedButtonId(value);
+        answerParams.retrieveValue(value);
+    };
 
     return (
         <div className="grid grid-cols-2 grid-rows-2 gap-4 w-full h-full justify-center items-center">
-            {shuffledButtons.map((btn,index) => (
+            {button.map((btn, index) => (
                 <button
                     key={btn.shape}
-                    value={""}
                     disabled={disabled}
-                    className={`btn ${colors[index]} h-full w-full flex justify-center items-center p-6`}
-                    onClick={() => onAnswer(btn.id)}
+                    className={`btn h-full w-full flex justify-center items-center p-6
+        ${disabled ? (btn.id === selectedButtonId ? colors[index] : "bg-gray-400") : colors[index]}`}
+                    onClick={() => onAnswer(btn.id!)}
                 >
                     {btn.svg}
                 </button>
+
             ))}
         </div>
     );

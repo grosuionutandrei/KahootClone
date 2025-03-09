@@ -22,36 +22,56 @@ export const AllPlayers = () => {
         if (retrieveInitialPlayers) {
             getCurrentPlayers();
         }
-       reactToBroadcast();
-        startCounter();
-    }, [onMessage,readyState]);
-
-    const reactToBroadcast = () => {
-        const unsubscribe = onMessage<ServerUpdateJoinPlayersDto>(
+        const unsubscribePlayers = onMessage<ServerUpdateJoinPlayersDto>(
             StringConstants.ServerUpdateJoinPlayersDto,
             (message) => {
                 const newPlayers = message.players || [];
-                console.log("Players broadcast")
-                console.log(newPlayers);
                 setPlayers(newPlayers);
                 toast.success(`Players updated: ${newPlayers.length}`);
             }
         );
-        return () => unsubscribe();
-    };
 
-    const startCounter=()=>{
-        const unsubscribe = onMessage<CounterBroadcast>(
+        const unsubscribeCounter = onMessage<CounterBroadcast>(
             StringConstants.CounterBroadcast,
             (message) => {
-                if(message.startCounter){
-                   console.log("navigatedtogame")
-                 navigate("game",{replace:true});
+                if (message.startCounter) {
+                    navigate("game", { replace: true });
                 }
             }
         );
-        return () => unsubscribe();
-    }
+
+        return () => {
+            unsubscribePlayers();
+            unsubscribeCounter();
+        };
+    }, [onMessage,readyState]);
+
+    // const reactToBroadcast = () => {
+    //     const unsubscribe = onMessage<ServerUpdateJoinPlayersDto>(
+    //         StringConstants.ServerUpdateJoinPlayersDto,
+    //         (message) => {
+    //             const newPlayers = message.players || [];
+    //             console.log("Players broadcast")
+    //             console.log(newPlayers);
+    //             setPlayers(newPlayers);
+    //             toast.success(`Players updated: ${newPlayers.length}`);
+    //         }
+    //     );
+    //     return () => unsubscribe();
+    // };
+    //
+    // const startCounter=()=>{
+    //     const unsubscribe = onMessage<CounterBroadcast>(
+    //         StringConstants.CounterBroadcast,
+    //         (message) => {
+    //             if(message.startCounter){
+    //                console.log("navigatedtogame")
+    //              navigate("game",{replace:true});
+    //             }
+    //         }
+    //     );
+    //     return () => unsubscribe;
+    // }
 
     const getCurrentPlayers = async () => {
         const request: ClientLoadPlayersDto = {

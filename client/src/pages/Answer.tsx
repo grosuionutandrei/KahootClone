@@ -8,34 +8,43 @@ import {useWsClient} from "ws-request-hook";
 export const Answer = ()=>{
     const {onMessage, sendRequest, send, readyState} = useWsClient();
     const [disabled,setDisabled] = useState<boolean>(false);
-    const currentQuestion= useRef<CurrentQuestion>({
+    const [currentQuestion,setCurrentQuestion]= useState<CurrentQuestion>({
         gameId:"",
         questionId:"",
         options : []
     });
-    const response = useRef<string>("");
+    const selectedResponse = useRef<string>("");
+
     useEffect(() => {
         if(!readyState)return
-        reactToMessage();
-    }, [onMessage]);
+        console.log("✅ WebSocket is ready! Subscribing to messages...");
 
-    const reactToMessage = async ()=>{
-        const unsubscribe=onMessage<ServerSendsCurrentQuestionId>(
+        const unsubscribe = onMessage<ServerSendsCurrentQuestionId>(
             StringConstants.ServerSendsCurrentQuestionId,
-            message => {
-                currentQuestion.current = {
+            (message) => {
+                setCurrentQuestion({
                     gameId: message.gameId || "",
                     questionId: message.questionId || "",
                     options: message.questionOptions || []
-                }
-                toast.success("retrieved Question")
+                });
+                toast.success(`New Question ID: ${message.questionId}`);
             }
-        )
-        return ()=>unsubscribe();
+        );
+
+        return () => {
+            unsubscribe();
+        };
+    }, [onMessage, readyState]);
+
+
+
+    const retrieveReponse = (value:string)=>{
+        selectedResponse.current =  value;
+        setDisabled(true);
     }
 
 return (
-    <Variant>
+    <Variant disabled={disabled} options={currentQuestion.options} retrieveValue={retrieveReponse}>
 
     </Variant>
 )

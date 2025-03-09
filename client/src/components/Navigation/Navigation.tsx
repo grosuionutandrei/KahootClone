@@ -22,7 +22,7 @@ export const Navigation = () => {
                         <img
                             src={player.avatarId}
                             alt={player.nickname}
-                            className="w-12  h-1/20 rounded-full border-2 border-gray-600"
+                            className="w-12  h-full rounded-full border-2 border-gray-600"
                         />
                         <span className="text-lg font-medium">{player.nickname}</span>
                     </>

@@ -1,6 +1,6 @@
 import {CountdownTimer} from "../components/Lobby";
 import {
-    AdminAskCurrentQuestionDto,
+    AdminAskCurrentQuestionDto, AdminDisplayQuestion,
     ServerSendsCurrentQuestionForAdmin,
     ServerSendsErrorMessageDto,
     StringConstants
@@ -8,9 +8,12 @@ import {
 import toast from "react-hot-toast";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useWsClient} from "ws-request-hook";
+import {useAtom} from "jotai";
+import {CurrentQuestionAtom} from "../atoms/CurrentQuestion/CurrentquestionAtom.ts";
 
 export const GamePage =()=>{
-    const { onMessage, sendRequest, readyState } = useWsClient();
+    const { onMessage, sendRequest,send, readyState } = useWsClient();
+    const [currentQuestion,setCurrentQuestion] = useAtom(CurrentQuestionAtom);
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
@@ -21,17 +24,24 @@ export const GamePage =()=>{
             eventType:StringConstants.AdminAskCurrentQuestionDto,
             requestId:"ana"
         }
-
         try {
             const questionReceived  = await sendRequest<AdminAskCurrentQuestionDto,ServerSendsCurrentQuestionForAdmin>(
                 request,StringConstants.ServerSendsCurrentQuestionForAdmin
             );
             if(questionReceived.success){
                 if(location.pathname.includes("admin")){
+                    setCurrentQuestion({
+                        questionId:questionReceived.questionId,
+                        questionText:questionReceived.questionText,
+                        questionOptions:questionReceived.questionOptions,
+                        isNextQuestion:questionReceived.isNextQuestion,
+                        requestId:questionReceived.requestId
+                    })
                     toast.success("I got the question");
+                    navigate(`${location.pathname}/currentQuestion`,{replace:true});
+                    sendCommandToDisplayAnswers(questionReceived.questionId!,params.gameId!);
                     return;
                 }
-
                 if(location.pathname.includes("players")){
                     navigate(`${location.pathname}/answer`,{replace:true});
                 }
@@ -48,6 +58,18 @@ export const GamePage =()=>{
             toast.error(message);
         }
     }
+
+    const sendCommandToDisplayAnswers=(questionId:string,gameId:string)=>{
+        const request:AdminDisplayQuestion = {
+            questionId:questionId,
+            gameId:gameId,
+            eventType:StringConstants.AdminDisplayQuestion,
+            requestId:crypto.randomUUID()
+        }
+        send<AdminDisplayQuestion>(request);
+    }
+
+
 
 
     return (

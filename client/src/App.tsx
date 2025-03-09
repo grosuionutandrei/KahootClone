@@ -18,6 +18,7 @@ export default function App() {
             <div className={"w-screen h-19/20 flex-col justify-center items-center bg-white"}>
             <Routes>
                 <Route path={"admin"} element={<AdminPage/>}></Route>
+                <Route path={"admin/:gameId/game"} element={<GamePage/>}></Route>
                 <Route path={"/"} element={<Home/>} ></Route>
                 <Route path={"lobby/:gameId/players/game/answer"} element={<Answer/>} ></Route>
                 <Route path={"lobby/:gameId"} element={<Lobby/>}></Route>
