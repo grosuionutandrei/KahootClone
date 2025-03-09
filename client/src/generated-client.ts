@@ -27,6 +27,44 @@ export interface ServerPutsClientInLobbyAndBroadcastsToEveryoneDto extends BaseD
     allClientIds?: string[];
 }
 
+export interface ClientStartsCounter extends BaseDto {
+}
+
+export interface CounterBroadcast extends BaseDto {
+    startCounter?: boolean;
+}
+
+export interface AdminDisplayQuestion extends BaseDto {
+    gameId?: string;
+    questionId?: string;
+}
+
+export interface ServerSendsCurrentQuestionId extends BaseDto {
+    gameId?: string;
+    questionId?: string;
+    questionOptions?: QuestionOptionDto[];
+}
+
+export interface QuestionOptionDto {
+    optionText?: string;
+    optionShape?: string;
+    optionId?: string;
+}
+
+export interface ClientLoadPlayersDto extends BaseDto {
+    topic?: string;
+    gameId?: string;
+}
+
+export interface ClientLoadsPlayersNumberDto extends BaseDto {
+    topic?: string;
+    gameId?: string;
+}
+
+export interface ServerSendsInitialPlayers extends BaseDto {
+    players?: number;
+}
+
 export interface ClientRetrieveAvatarDto extends BaseDto {
     gameId?: string;
 }
@@ -43,8 +81,16 @@ export interface ServerSendsErrorMessageDto extends BaseDto {
     error?: string;
 }
 
-export interface ClientLoadsPlayersNumberDto extends BaseDto {
-    topic?: string;
+export interface AdminAskCurrentQuestionDto extends BaseDto {
+    gameId?: string;
+}
+
+export interface ServerSendsCurrentQuestionForAdmin extends BaseDto {
+    questionId?: string;
+    questionText?: string;
+    questionOptions?: QuestionOptionDto[];
+    success?: boolean;
+    isNextQuestion?: boolean;
 }
 
 export interface AdminCreatesGameDto extends BaseDto {
@@ -69,19 +115,39 @@ export interface ServerUpdatePlayersDto extends BaseDto {
     avatars?: string[];
 }
 
+export interface ServerUpdateJoinPlayersDto extends BaseDto {
+    players?: PlayerInfoDto[];
+}
+
+export interface PlayerInfoDto {
+    id?: string;
+    gameId?: string | undefined;
+    nickname?: string;
+    avatarId?: string;
+}
+
 /** Available eventType constants */
 export enum StringConstants {
     MemberHasLeftDto = "MemberHasLeftDto",
     ClientEntersLobbyDto = "ClientEntersLobbyDto",
     ServerPutsClientInLobbyAndBroadcastsToEveryoneDto = "ServerPutsClientInLobbyAndBroadcastsToEveryoneDto",
+    ClientStartsCounter = "ClientStartsCounter",
+    CounterBroadcast = "CounterBroadcast",
+    AdminDisplayQuestion = "AdminDisplayQuestion",
+    ServerSendsCurrentQuestionId = "ServerSendsCurrentQuestionId",
+    ClientLoadPlayersDto = "ClientLoadPlayersDto",
+    ClientLoadsPlayersNumberDto = "ClientLoadsPlayersNumberDto",
+    ServerSendsInitialPlayers = "ServerSendsInitialPlayers",
     ClientRetrieveAvatarDto = "ClientRetrieveAvatarDto",
     ServerSendsAvatarList = "ServerSendsAvatarList",
     ServerConfirmsDto = "ServerConfirmsDto",
     ServerSendsErrorMessageDto = "ServerSendsErrorMessageDto",
-    ClientLoadsPlayersNumberDto = "ClientLoadsPlayersNumberDto",
+    AdminAskCurrentQuestionDto = "AdminAskCurrentQuestionDto",
+    ServerSendsCurrentQuestionForAdmin = "ServerSendsCurrentQuestionForAdmin",
     AdminCreatesGameDto = "AdminCreatesGameDto",
     ServerConfirmsGameDto = "ServerConfirmsGameDto",
     ClientAddsPlayerInfoDto = "ClientAddsPlayerInfoDto",
     ServerUpdatePlayersDto = "ServerUpdatePlayersDto",
+    ServerUpdateJoinPlayersDto = "ServerUpdateJoinPlayersDto",
 }
 

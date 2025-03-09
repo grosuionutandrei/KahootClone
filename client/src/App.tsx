@@ -5,8 +5,9 @@ import {KEYS} from "./hooks/keys";
 import {useClientIdState} from "./hooks";
 import React, {useState} from "react";
 import './App.css'
-import {Home, Lobby} from "./pages";
+import {AdminPage, Answer, GamePage, Home, JoinedPlayers, Lobby} from "./pages";
 import {Navigation} from "./components/Navigation/Navigation.tsx";
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 export default function App() {
    const manageClientId= useClientIdState(KEYS.CLIENT_ID);
@@ -14,11 +15,14 @@ export default function App() {
     return (
         <WsClientProvider url={baseUrl + '?id=' + clientId}>
             <Navigation ></Navigation>
-            <div className={"w-screen h-screen flex-col justify-center items-center bg-white"}>
+            <div className={"w-screen h-19/20 flex-col justify-center items-center bg-white"}>
             <Routes>
+                <Route path={"admin"} element={<AdminPage/>}></Route>
                 <Route path={"/"} element={<Home/>} ></Route>
-                <Route path={"lobby/:gameId"} element={<Lobby/>}>
-                </Route>
+                <Route path={"lobby/:gameId/players/game/answer"} element={<Answer/>} ></Route>
+                <Route path={"lobby/:gameId"} element={<Lobby/>}></Route>
+                <Route path={"lobby/:gameId/players/game"} element={<GamePage/>}></Route>
+                <Route path={"lobby/:gameId/players"} element = {<JoinedPlayers/>}></Route>
             </Routes>
             </div>
             <Toaster/>

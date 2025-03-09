@@ -1,2 +1,6 @@
 export {Home as Home} from "./Home.tsx"
 export {Lobby as Lobby} from "./Lobby.tsx"
+export {JoinedPlayers as JoinedPlayers} from "./Joinedplayers.tsx"
+export {AdminPage as AdminPage} from "./Admin.tsx"
+export {GamePage as GamePage} from "./Game.tsx"
+export {Answer as Answer} from "./Answer.tsx"
